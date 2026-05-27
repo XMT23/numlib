@@ -1,5 +1,5 @@
 from .ivp import IVP
-from .solver import euler, euler2, taylor2, rk2, rk4
+from .solver import euler, euler2, taylor2, rk2, rk4, ab2, ab4
 
 __all__ = [
     "IVP",
@@ -8,4 +8,6 @@ __all__ = [
     "taylor2",
     "rk2",
     "rk4",
+    "ab2",
+    "ab4",
 ]
