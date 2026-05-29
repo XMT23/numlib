@@ -77,6 +77,42 @@ def ab4_step(system: IVP, history: list, h: float) -> Tuple[float, np.ndarray]:
     return t + h, y + (h / 24) * (55 * f[3] - 59 * f[2] + 37 * f[1] - 9 * f[0])
 
 
+def am_step(
+    system: IVP,
+    history: list,
+    h: float,
+    tol: float = 1e-10,
+    max_iter: int = 50,
+) -> Tuple[float, np.ndarray]:
+    t, y = history[-1]
+    f = [system.evaluate(ti, yi) for ti, yi in history[-3:]]
+
+    t_new = t + h
+    y_new = y.copy()
+
+    for _ in range(max_iter):
+        f_new = system.evaluate(t_new, y_new)
+        y_next = y + (h / 24) * (9 * f_new + 19 * f[2] - 5 * f[1] + f[0])
+        if np.max(np.abs(y_next - y_new)) < tol:
+            return t_new, y_next
+        y_new = y_next
+
+    return t_new, y_new
+
+
+# predictor-correcto
+def pc_step(system: IVP, history: list, h: float) -> Tuple[float, np.ndarray]:
+    t, y = history[-1]
+    f = [system.evaluate(ti, yi) for ti, yi in history[-4:]]
+
+    y_pred = y + (h / 24) * (55 * f[3] - 59 * f[2] + 37 * f[1] - 9 * f[0])
+
+    f_pred = system.evaluate(t + h, y_pred)
+    y_new = y + (h / 24) * (9 * f_pred + 19 * f[3] - 5 * f[2] + f[1])
+
+    return t + h, y_new
+
+
 def _solver(step_fn: Callable, system: IVP, tf: float, h: float, **kwargs):
     t, y = system.t0, system.y0.copy()
     while t < tf:
@@ -148,3 +184,11 @@ def ab2(system: IVP, tf: float, h: float) -> Generator:
 
 def ab4(system: IVP, tf: float, h: float) -> Generator:
     return _multipass_solver(ab4_step, 4, system, tf, h)
+
+
+def am(system: IVP, tf: float, h: float) -> Generator:
+    return _multipass_solver(am_step, 3, system, tf, h)
+
+
+def pc(system: IVP, tf: float, h: float) -> Generator:
+    return _multipass_solver(pc_step, 4, system, tf, h)

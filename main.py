@@ -40,6 +40,8 @@ for nombre, gen in [
     ("RK4    ", rk4(system1, tf, h)),
     ("AB2    ", ab2(system1, tf, h)),
     ("AB4    ", ab4(system1, tf, h)),
+    ("AM     ", am(system1, tf, h)),
+    ("PC    ", pc(system1, tf, h)),
 ]:
     err = error_final(gen, exact1)
     print(f"  {nombre}  error en t={tf}: {err[0]:.2e}")
@@ -70,7 +72,9 @@ for nombre, gen in [
     ("RK2    ", rk2(system2, tf, h)),
     ("RK4    ", rk4(system2, tf, h)),
     ("AB2    ", ab2(system2, tf, h)),
-    ("AB4    ", ab4(system1, tf, h)),
+    ("AB4    ", ab4(system2, tf, h)),
+    ("AM     ", am(system2, tf, h)),
+    ("PC    ", pc(system2, tf, h)),
 ]:
     err = error_final(gen, exact2)
     print(f"  {nombre}  error en t={tf}: {err[0]:.2e}")
@@ -99,7 +103,9 @@ for nombre, gen in [
     ("RK2    ", rk2(system3, tf, h)),
     ("RK4    ", rk4(system3, tf, h)),
     ("AB2    ", ab2(system3, tf, h)),
-    ("AB4    ", ab4(system1, tf, h)),
+    ("AB4    ", ab4(system3, tf, h)),
+    ("AM     ", am(system3, tf, h)),
+    ("PC    ", pc(system3, tf, h)),
 ]:
     err = error_final(gen, exact3)
     print(f"  {nombre}  error en t=2π: x={err[0]:.2e}, v={err[1]:.2e}")
