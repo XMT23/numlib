@@ -116,11 +116,11 @@ def pc_step(system: IVP, history: list, h: float) -> Tuple[float, np.ndarray]:
 def _solver(step_fn: Callable, system: IVP, tf: float, h: float, **kwargs):
     t, y = system.t0, system.y0.copy()
     while t < tf:
-        h_actual = min(h, tf - t)
-        h_nuevo = yield t, y
-        if h_nuevo is not None:
-            h = h_nuevo
-        t, y = step_fn(system, t, y, h_actual, **kwargs)
+        h_current = min(h, tf - t)
+        h_new = yield t, y
+        if h_new is not None:
+            h = h_new
+        t, y = step_fn(system, t, y, h_current, **kwargs)
     yield t, y
 
 
@@ -140,11 +140,11 @@ def _multipass_solver(
 
     while history[-1][0] < tf:
         t, y = history[-1]
-        h_actual = min(h, tf - t)
-        h_nuevo = yield t, y
-        if h_nuevo is not None:
-            h = h_nuevo
-        t_new, y_new = step_fn(system, history, h_actual, **kwargs)
+        h_current = min(h, tf - t)
+        h_new = yield t, y
+        if h_new is not None:
+            h = h_new
+        t_new, y_new = step_fn(system, history, h_current, **kwargs)
         history.append((t_new, y_new))
         history = history[-n_steps:]
 
