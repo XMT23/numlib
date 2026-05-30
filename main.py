@@ -1,3 +1,7 @@
+"""
+CLI script for university assigment demo
+"""
+
 from typing import Tuple
 from numlib.integration import *
 from numlib.ivp import *
