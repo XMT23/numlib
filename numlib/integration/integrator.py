@@ -1,9 +1,10 @@
 from typing import Callable
+from .functions import MathFunction
 
-MathFunction = Callable[[float], float]
+IntegrationMethod = Callable[[MathFunction, float, float, int], float]
 
 
-def trapezoidal_simple(f: MathFunction, a: float, b: float) -> float:
+def trapezoidal_simple(f: MathFunction, a: float, b: float, _: int) -> float:
     return (b - a) / 2 * (f(a) + f(b))
 
 
@@ -21,7 +22,7 @@ def trapezoidal_composite(f: MathFunction, a: float, b: float, n: int) -> float:
     return (h / 2) * s
 
 
-def simpson_simple(f: MathFunction, a: float, b: float) -> float:
+def simpson_simple(f: MathFunction, a: float, b: float, _: int) -> float:
     m = (a + b) / 2
     return (b - a) / 6 * (f(a) + 4 * f(m) + f(b))
 
