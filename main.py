@@ -24,7 +24,7 @@ EXAMPLE_IVP = {
         vars=["x", "vx"],
         t0=0.0,
         y0=[1.0, 0.0],
-    )
+    ),
 }
 
 EXAMPLE_IVP_EXACT = {
@@ -33,12 +33,14 @@ EXAMPLE_IVP_EXACT = {
     "oscil_harmonic": lambda t: np.array([np.cos(t), -np.sin(t)]),
 }
 
+
 def error_final(solver_gen, exact_fn):
     t, y = None, None
     for t, y in solver_gen:
         pass
     y_exact = exact_fn(t)
     return np.abs(y - y_exact)
+
 
 def get_user_input():
     func = None
@@ -107,6 +109,7 @@ def select_ivp() -> Tuple[str, IVP]:
             print("ERROR:", e)
             print("IVP seleccionat no disponible")
 
+
 def select_h() -> float:
     while True:
         print("Introdueix un valor per h:")
@@ -117,6 +120,7 @@ def select_h() -> float:
             return h
         except Exception as e:
             print("ERROR:", e)
+
 
 def select_tf() -> float:
     while True:
@@ -129,7 +133,8 @@ def select_tf() -> float:
         except Exception as e:
             print("ERROR:", e)
 
-def solve_ivp(system: IVP, system_name: str,  tf: float, h: float):
+
+def solve_ivp(system: IVP, system_name: str, tf: float, h: float):
     for name, gen in [
         ("Euler   ", euler(system, tf, h)),
         ("Taylor2 ", taylor2(system, tf, h)),
@@ -142,6 +147,7 @@ def solve_ivp(system: IVP, system_name: str,  tf: float, h: float):
     ]:
         err = error_final(gen, EXAMPLE_IVP_EXACT[system_name])
         print(f"{name} error in t={tf}: {err[0]:.2e}")
+
 
 def main():
     print("=============================================")
@@ -173,6 +179,7 @@ def main():
                     exit()
         except Exception as e:
             print("ERROR:", e)
+
 
 if __name__ == "__main__":
     main()
